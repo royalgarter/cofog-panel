@@ -1,0 +1,9 @@
+pandas>=2.0.0
+openpyxl
+gspread
+google-auth
+google-auth-oauthlib
+google-auth-httplib2
+google-api-python-client
+gspread-dataframe
+typer[all]
