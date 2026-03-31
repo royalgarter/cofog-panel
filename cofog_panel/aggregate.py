@@ -184,7 +184,7 @@ def run_aggregation(
 
                 elif sector_override in [
                     "Budgetary central government", "Extrabudgetary central government", 
-                    "Local Government", "Social security funds", "State Government"
+                    "Local Government", "Social security funds", "State Government", "Central government excluding social security"
                 ]:
                     # Scenario 3: Directly select value from specified sector
                     dec_sector = get_dec_value(sector_override.lower(), year_str)
