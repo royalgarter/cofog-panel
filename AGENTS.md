@@ -19,11 +19,12 @@ No linter configured. Version lives in `cofog_panel/__init__.py` (`__version__`,
 
 Package `cofog_panel/` is a Typer CLI over a 5-stage pipeline; `cli.py` wires stages, `run` chains all five:
 
-1. `checks.py` — validate IMF metadata/year columns and country lookup
-2. `master_seed.py` — build master panel (SortKey = ISO3+year, 1972–2025), country lookup bundled at `cofog_panel/data/country_codes.xlsx` (copy also at `data/`)
-3. `etl.py` (`split`) — filter one transformation + one COFOG function, write per-country files into a split dir marked by `.cofog_panel_split` (records the COFOG function; never delete files elsewhere)
-4. `aggregate.py` — core selection rule `resolve_value`: T1 (GG) → T2 (CGSS+SG+LG) → T3 (central components+SSF+SG+LG); also C1/C2 and D (single sector) methods. Writes value + tier + sectors + completeness (`Y/N`) columns into master.
-5. `source.py` reads IMF CSV or xlsx (xlsx preferred if both exist); `options.py` validates `--cofog`/`--filter-type`/`--sector` *before* any file is read (file is ~372k rows, scan is slow); `messages.py` holds the shared two-line error format.
+1. `checks.py` (`check-format`) — validate IMF metadata/year columns
+2. `checks.py` (`check-country-format`) — validate country lookup
+3. `master_seed.py` — build master panel (SortKey = ISO3+year, 1972–2025), country lookup bundled at `cofog_panel/data/country_codes.xlsx` (copy also at `data/`)
+4. `etl.py` (`split`) — filter one transformation + one COFOG function, write per-country files into a split dir marked by `.cofog_panel_split` (records the COFOG function; never delete files elsewhere)
+5. `aggregate.py` — core selection rule `resolve_value`: T1 (GG) → T2 (CGSS+SG+LG) → T3 (central components+SSF+SG+LG); also C1/C2 and D (single sector) methods. Writes value + tier + sectors + completeness (`Y/N`) columns into master.
+Supporting: `source.py` reads IMF CSV or xlsx (xlsx preferred if both exist); `options.py` validates `--cofog`/`--filter-type`/`--sector` *before* any file is read (file is ~372k rows, scan is slow); `messages.py` holds the shared two-line error format.
 
 Conventions to keep:
 - Every error = `❌ Error:` line + `Hint:` line via `print_error`; exit 1 data/option error, 2 usage error. CI asserts exactly two lines for a missing source file.
